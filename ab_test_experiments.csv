@@ -1,0 +1,6 @@
+experiment_id,name,variants,start_time,end_time,status,notes
+exp_20250812183829,Summarizer A/B Test,"summarizer_v1,summarizer_v2",2025-08-12T18:38:29.233602,,active,Comparing two summarization models
+exp_20250812191456,Summarizer A/B Test,"summarizer_v1,summarizer_v2",2025-08-12T19:14:56.595320,,active,Comparing two summarization models
+exp_20250812193812,Summarizer A/B Test,"summarizer_v1,summarizer_v2",2025-08-12T19:38:12.167536,,active,Comparing two summarization models
+exp_20250812200258,Enhanced Summarizer A/B Test,"gemini-2.5-flash,gemini-2.0-flash",2025-08-12T20:02:58.586355,,active,Comparing flash vs pro models for summarization
+exp_20250813001015,Enhanced Summarizer A/B Test,"gemini-2.5-flash,gemini-2.0-flash",2025-08-13T00:10:15.140298,,active,Comparing flash vs pro models for summarization
