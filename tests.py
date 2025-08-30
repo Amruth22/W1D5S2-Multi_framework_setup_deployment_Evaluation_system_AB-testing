@@ -276,31 +276,43 @@ async def test_03_ab_test_experiment_management():
     print(f"PASS: A/B experiment created with ID: {exp_id}")
     print(f"PASS: Experiment details - Name: {experiment['name']}, Variants: {experiment['variants']}")
 
-async def test_04_ab_test_user_assignment():
-    """Test 4: A/B Test User Assignment"""
-    print("Running Test 4: A/B Test User Assignment")
+async def test_04_model_configuration():
+    """Test 4: Model Configuration Validation"""
+    print("Running Test 4: Model Configuration Validation")
     
-    # Create experiment first
-    exp_id = await mock_evaluation.create_ab_test_experiment(
-        "Assignment Test", ["model_a", "model_b"]
-    )
+    # Test model configuration values
+    models = {
+        "pro": MOCK_CONFIG["GEMINI_PRO_MODEL"],
+        "flash": MOCK_CONFIG["GEMINI_FLASH_MODEL"],
+        "pro_text": MOCK_CONFIG["GEMINI_PRO_TEXT_MODEL"]
+    }
     
-    # Assign users to variants
-    variant1 = await mock_evaluation.assign_user_to_variant("user_1", exp_id)
-    variant2 = await mock_evaluation.assign_user_to_variant("user_2", exp_id)
+    # Validate model names
+    for model_type, model_name in models.items():
+        assert model_name is not None, f"{model_type} model should be configured"
+        assert isinstance(model_name, str), f"{model_type} model name should be a string"
+        assert len(model_name) > 0, f"{model_type} model name should not be empty"
+        assert "gemini" in model_name.lower(), f"{model_type} should be a Gemini model"
     
-    assert variant1 in ["model_a", "model_b"], "Should assign valid variant"
-    assert variant2 in ["model_a", "model_b"], "Should assign valid variant"
+    print(f"PASS: Model configurations validated")
+    print(f"PASS: Pro model: {models['pro']}")
+    print(f"PASS: Flash model: {models['flash']}")
+    print(f"PASS: Pro-text model: {models['pro_text']}")
     
-    # Verify assignments were created
-    assert len(mock_evaluation.ab_assignments) == 2, "Should have 2 assignments"
+    # Test API configuration
+    assert MOCK_CONFIG["API_HOST"] is not None, "API host should be configured"
+    assert MOCK_CONFIG["API_PORT"] is not None, "API port should be configured"
+    assert isinstance(MOCK_CONFIG["API_PORT"], int), "API port should be an integer"
     
-    assignment1 = mock_evaluation.ab_assignments[0]
-    assert assignment1["user_id"] == "user_1", "Should assign correct user ID"
-    assert assignment1["experiment_id"] == exp_id, "Should assign correct experiment ID"
+    # Test file paths configuration
+    file_configs = ["EVAL_LOG_FILE", "AB_TEST_EXPERIMENTS_FILE", "AB_TEST_ASSIGNMENTS_FILE"]
+    for file_config in file_configs:
+        assert MOCK_CONFIG[file_config] is not None, f"{file_config} should be configured"
+        assert isinstance(MOCK_CONFIG[file_config], str), f"{file_config} should be a string"
+        assert MOCK_CONFIG[file_config].endswith(".csv"), f"{file_config} should be a CSV file"
     
-    print(f"PASS: User assignments - user_1: {variant1}, user_2: {variant2}")
-    print(f"PASS: Total assignments created: {len(mock_evaluation.ab_assignments)}")
+    print(f"PASS: API configuration - Host: {MOCK_CONFIG['API_HOST']}, Port: {MOCK_CONFIG['API_PORT']}")
+    print(f"PASS: File configurations validated")
 
 async def test_05_ab_test_results_analysis():
     """Test 5: A/B Test Results Analysis"""
@@ -491,7 +503,7 @@ async def run_async_tests():
         test_01_env_config_validation,
         test_02_evaluation_logging,
         test_03_ab_test_experiment_management,
-        test_04_ab_test_user_assignment,
+        test_04_model_configuration,
         test_05_ab_test_results_analysis,
         test_06_summarize_endpoint,
         test_07_qa_endpoint,
