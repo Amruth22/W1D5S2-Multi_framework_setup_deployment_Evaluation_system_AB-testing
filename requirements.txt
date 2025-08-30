@@ -4,6 +4,6 @@ flasgger
 langchain
 langchain-google-genai
 python-dotenv
- nltk
- rouge-score
- 
+nltk
+rouge-score
+pytest-tornasync
